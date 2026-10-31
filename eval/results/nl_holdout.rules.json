@@ -1,0 +1,351 @@
+{
+  "summary": {
+    "parser": "rules",
+    "model": null,
+    "cases": 12,
+    "status_accuracy": 0.75,
+    "intent_accuracy": 0.667,
+    "slot_accuracy": 0.583,
+    "exact_match": 0.5,
+    "by_group": {
+      "holdout": "6/12"
+    },
+    "median_ms": 0.1,
+    "parser_fallbacks": 0,
+    "llm_answers": 0,
+    "grounding_rejections": 0
+  },
+  "cases": [
+    {
+      "id": "H1",
+      "group": "holdout",
+      "question": "List the skills a DevOps Engineer must have",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-07"
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-07"
+      },
+      "ms": 0.2,
+      "misses": [],
+      "parser": "rules",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "H2",
+      "group": "holdout",
+      "question": "what competencies does a green building engineer require",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-17"
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-17"
+      },
+      "ms": 0.1,
+      "misses": [],
+      "parser": "rules",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "H3",
+      "group": "holdout",
+      "question": "I've got SQL and data analytics under my belt. Best way into a Health Data Analyst job?",
+      "ok_status": true,
+      "ok_intent": false,
+      "ok_slots": false,
+      "exact": false,
+      "got": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-13",
+        "known_skills": []
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-13",
+        "known_skills": [
+          "SKL-03",
+          "SKL-02"
+        ]
+      },
+      "ms": 0.1,
+      "misses": [
+        "intent skills_for_role != learning_path",
+        "known_skills [] != ['SKL-02', 'SKL-03']"
+      ],
+      "parser": "rules",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "H4",
+      "group": "holdout",
+      "question": "Python + statistics. Shortest route to Data Scientist please",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": false,
+      "exact": false,
+      "got": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-01",
+        "known_skills": []
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-01",
+        "known_skills": [
+          "SKL-01",
+          "SKL-52"
+        ]
+      },
+      "ms": 0.3,
+      "misses": [
+        "known_skills [] != ['SKL-01', 'SKL-52']"
+      ],
+      "parser": "rules",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "H5",
+      "group": "holdout",
+      "question": "Which Green skills would be useful in the Care economy?",
+      "ok_status": false,
+      "ok_intent": false,
+      "ok_slots": false,
+      "exact": false,
+      "got": {
+        "status": "unsupported",
+        "intent": "out_of_scope",
+        "source_economy": null,
+        "target_economy": null,
+        "bidirectional": null
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "transferable_skills",
+        "source_economy": "Green",
+        "target_economy": "Care",
+        "bidirectional": false
+      },
+      "ms": 0.1,
+      "misses": [
+        "status unsupported != answered",
+        "intent out_of_scope != transferable_skills",
+        "source_economy None != Green",
+        "target_economy None != Care",
+        "bidirectional None != False"
+      ],
+      "parser": "rules",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "H6",
+      "group": "holdout",
+      "question": "most transferable skills from finance to sustainability",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "transferable_skills",
+        "source_economy": "Digital",
+        "target_economy": "Green",
+        "bidirectional": false
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "transferable_skills",
+        "source_economy": "Digital",
+        "target_economy": "Green",
+        "bidirectional": false
+      },
+      "ms": 0.3,
+      "misses": [],
+      "parser": "rules",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "H7",
+      "group": "holdout",
+      "question": "I work as a UX Designer. What am I lacking for Product Manager?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "gap_analysis",
+        "target_role": "ROL-08",
+        "current_role": "ROL-09"
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "gap_analysis",
+        "target_role": "ROL-08",
+        "current_role": "ROL-09"
+      },
+      "ms": 0.1,
+      "misses": [],
+      "parser": "rules",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "H8",
+      "group": "holdout",
+      "question": "Compare my skills (Python, Full-Stack Development) against the AI Engineer role",
+      "ok_status": true,
+      "ok_intent": false,
+      "ok_slots": false,
+      "exact": false,
+      "got": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-02",
+        "known_skills": []
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "gap_analysis",
+        "target_role": "ROL-02",
+        "known_skills": [
+          "SKL-01",
+          "SKL-17"
+        ]
+      },
+      "ms": 0.2,
+      "misses": [
+        "intent skills_for_role != gap_analysis",
+        "known_skills [] != ['SKL-01', 'SKL-17']"
+      ],
+      "parser": "rules",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "H9",
+      "group": "holdout",
+      "question": "any courses for ESG reporting?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "courses_for_skill",
+        "skills": [
+          "SKL-44"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "courses_for_skill",
+        "skills": [
+          "SKL-44"
+        ]
+      },
+      "ms": 0.1,
+      "misses": [],
+      "parser": "rules",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "H10",
+      "group": "holdout",
+      "question": "How can I pick up deep learning?",
+      "ok_status": false,
+      "ok_intent": false,
+      "ok_slots": false,
+      "exact": false,
+      "got": {
+        "status": "unsupported",
+        "intent": "out_of_scope",
+        "skills": []
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "courses_for_skill",
+        "skills": [
+          "SKL-05"
+        ]
+      },
+      "ms": 0.0,
+      "misses": [
+        "status unsupported != answered",
+        "intent out_of_scope != courses_for_skill",
+        "skills [] != ['SKL-05']"
+      ],
+      "parser": "rules",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "H11",
+      "group": "holdout",
+      "question": "Teach me how to cook pasta",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "unsupported"
+      },
+      "expected": {
+        "status": "unsupported"
+      },
+      "ms": 0.0,
+      "misses": [],
+      "parser": "rules",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "H12",
+      "group": "holdout",
+      "question": "What skills does an analyst need?",
+      "ok_status": false,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": false,
+      "got": {
+        "status": "unsupported"
+      },
+      "expected": {
+        "status": "needs_clarification"
+      },
+      "ms": 0.0,
+      "misses": [
+        "status unsupported != needs_clarification"
+      ],
+      "parser": "rules",
+      "answer_source": "template",
+      "grounding_problems": []
+    }
+  ]
+}

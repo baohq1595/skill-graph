@@ -1,0 +1,77 @@
+# Natural-language evaluation set.
+#
+# Each case states what a correct pipeline must produce *after* resolution
+# (graph ids, not surface text), so parsers are judged on the outcome that
+# matters. Fields left out are not checked.
+#   status: answered | needs_clarification | not_found | unsupported
+# Groups: sample (the 5 queries shipped with the dataset), template (the 3
+# required templates, reworded), variant (typos, slang, reordering),
+# edge (ambiguity, unknowns, out of scope).
+
+- {id: S1, group: sample, q: "What skills does a Data Scientist need?",
+   status: answered, intent: skills_for_role, target_role: ROL-01}
+- {id: S2, group: sample, q: "I know Python and SQL. What is the fastest path to becoming an AI Engineer?",
+   status: answered, intent: learning_path, target_role: ROL-02, known_skills: [SKL-01, SKL-03]}
+- {id: S3, group: sample, q: "Which skills are most transferable between the Digital and Green economies?",
+   status: answered, intent: transferable_skills, source_economy: Digital, target_economy: Green, bidirectional: true}
+- {id: S4, group: sample, q: "I am a healthcare data analyst. What skill gaps do I have for a Sustainability Consultant role?",
+   status: answered, intent: gap_analysis, target_role: ROL-16, current_role: ROL-13}
+- {id: S5, group: sample, q: "What SkillsFuture courses should I take to learn Machine Learning?",
+   status: answered, intent: courses_for_skill, skills: [SKL-04]}
+
+- {id: T1a, group: template, q: "What skills do I need to become a Data Scientist?",
+   status: answered, intent: skills_for_role, target_role: ROL-01}
+- {id: T1b, group: template, q: "What do I need to learn to work as a UX designer?",
+   status: answered, intent: skills_for_role, target_role: ROL-09}
+- {id: T1c, group: template, q: "Which skills are needed for a RegTech Specialist role?",
+   status: answered, intent: skills_for_role, target_role: ROL-11}
+- {id: T1d, group: template, q: "requirements for cloud solutions architect",
+   status: answered, intent: skills_for_role, target_role: ROL-05}
+- {id: T2a, group: template, q: "I know Python, SQL and Statistics. What's the fastest path to Data Scientist?",
+   status: answered, intent: learning_path, target_role: ROL-01, known_skills: [SKL-01, SKL-03, SKL-52]}
+- {id: T2b, group: template, q: "I have experience in DevOps and Docker. How do I become a Cloud Solutions Architect?",
+   status: answered, intent: learning_path, target_role: ROL-05, known_skills: [SKL-19, SKL-22]}
+- {id: T2c, group: template, q: "I know Python. How can I become an ML engineer?",
+   status: answered, intent: learning_path, target_role: ROL-02, known_skills: [SKL-01]}
+- {id: T2d, group: template, q: "How do I become a Smart Manufacturing Engineer? I know IoT.",
+   status: answered, intent: learning_path, target_role: ROL-18, known_skills: [SKL-45]}
+- {id: T3a, group: template, q: "Which Digital skills are most transferable to the Green economy?",
+   status: answered, intent: transferable_skills, source_economy: Digital, target_economy: Green, bidirectional: false}
+- {id: T3b, group: template, q: "Which Care skills transfer best to the Digital economy?",
+   status: answered, intent: transferable_skills, source_economy: Care, target_economy: Digital, bidirectional: false}
+- {id: T3c, group: template, q: "What green skills carry over into healthcare?",
+   status: answered, intent: transferable_skills, source_economy: Green, target_economy: Care, bidirectional: false}
+
+- {id: V1, group: variant, q: "I already know machine lerning and pyton - quickest route to becoming an AI engineer?",
+   status: answered, intent: learning_path, target_role: ROL-02, known_skills: [SKL-04, SKL-01]}
+- {id: V2, group: variant, q: "I'm good at data visualisation and agile. Roadmap to Product Manager?",
+   status: answered, intent: learning_path, target_role: ROL-08, known_skills: [SKL-51, SKL-20]}
+- {id: V3, group: variant, q: "As a full-stack developer, what's the fastest way to become a DevOps Engineer?",
+   status: answered, intent: learning_path, target_role: ROL-07, current_role: ROL-06}
+- {id: V4, group: variant, q: "I'm a Data Engineer. What gaps do I have for AI Engineer?",
+   status: answered, intent: gap_analysis, target_role: ROL-02, current_role: ROL-03}
+- {id: V5, group: variant, q: "I know Python and SQL, what am I missing to be a FinTech Data Analyst?",
+   status: answered, intent: gap_analysis, target_role: ROL-10, known_skills: [SKL-01, SKL-03]}
+- {id: V6, group: variant, q: "Gap analysis for Health Data Analyst - my skills are data analytics and SQL",
+   status: answered, intent: gap_analysis, target_role: ROL-13, known_skills: [SKL-02, SKL-03]}
+- {id: V7, group: variant, q: "Which skills move most easily between tech and sustainability jobs?",
+   status: answered, intent: transferable_skills, source_economy: Digital, target_economy: Green, bidirectional: true}
+- {id: V8, group: variant, q: "What courses teach carbon accounting?",
+   status: answered, intent: courses_for_skill, skills: [SKL-42]}
+- {id: V9, group: variant, q: "Where can I learn Kubernetes?",
+   status: answered, intent: courses_for_skill, skills: [SKL-22]}
+- {id: V10, group: variant, q: "Recommend a SkillsFuture course for prompt engineering",
+   status: answered, intent: courses_for_skill, skills: [SKL-09]}
+
+- {id: E1, group: edge, q: "What skills do I need to become a data analyst?",
+   status: needs_clarification}
+- {id: E2, group: edge, q: "What skills do I need to become an astronaut?",
+   status: not_found}
+- {id: E3, group: edge, q: "What's the weather in Singapore?",
+   status: unsupported}
+- {id: E4, group: edge, q: "Write me a poem about data",
+   status: unsupported}
+- {id: E5, group: edge, q: "Which skills are transferable from Digital to Digital?",
+   status: needs_clarification}
+- {id: E6, group: edge, q: "I know Python and basket weaving. What's the fastest path to Data Engineer?",
+   status: answered, intent: learning_path, target_role: ROL-03, known_skills: [SKL-01]}

@@ -1,0 +1,233 @@
+{
+  "target_role": {
+    "id": "ROL-02",
+    "name": "AI / Machine Learning Engineer",
+    "sector": "Infocomm Technology",
+    "economy": "Digital",
+    "seniority": "Mid-Senior"
+  },
+  "mode": "fastest",
+  "already_have": [
+    "Python Programming"
+  ],
+  "steps": [
+    {
+      "order": 1,
+      "stage": 1,
+      "skill": {
+        "id": "SKL-52",
+        "name": "Statistical Analysis",
+        "difficulty": "Foundation",
+        "economy": "Digital",
+        "transferability": "High",
+        "sdfe_priority": false,
+        "tracks": [
+          "Data & AI"
+        ]
+      },
+      "kind": "prerequisite",
+      "after": [],
+      "why": "needed before Machine Learning"
+    },
+    {
+      "order": 2,
+      "stage": 1,
+      "skill": {
+        "id": "SKL-10",
+        "name": "AI Ethics & Governance",
+        "difficulty": "Intermediate",
+        "economy": "Digital",
+        "transferability": "High",
+        "sdfe_priority": true,
+        "tracks": [
+          "Data & AI"
+        ]
+      },
+      "kind": "required",
+      "after": [],
+      "why": "required by AI / Machine Learning Engineer"
+    },
+    {
+      "order": 3,
+      "stage": 2,
+      "skill": {
+        "id": "SKL-04",
+        "name": "Machine Learning",
+        "difficulty": "Intermediate",
+        "economy": "Digital",
+        "transferability": "Medium",
+        "sdfe_priority": true,
+        "tracks": [
+          "Data & AI"
+        ]
+      },
+      "kind": "required",
+      "after": [
+        "Statistical Analysis"
+      ],
+      "why": "required by AI / Machine Learning Engineer"
+    },
+    {
+      "order": 4,
+      "stage": 3,
+      "skill": {
+        "id": "SKL-08",
+        "name": "Generative AI",
+        "difficulty": "Intermediate",
+        "economy": "Digital",
+        "transferability": "High",
+        "sdfe_priority": true,
+        "tracks": [
+          "Data & AI",
+          "Learning Design & Technology"
+        ]
+      },
+      "kind": "required",
+      "after": [
+        "Machine Learning"
+      ],
+      "why": "required by AI / Machine Learning Engineer"
+    },
+    {
+      "order": 5,
+      "stage": 3,
+      "skill": {
+        "id": "SKL-12",
+        "name": "MLOps",
+        "difficulty": "Advanced",
+        "economy": "Digital",
+        "transferability": "Low",
+        "sdfe_priority": true,
+        "tracks": [
+          "Data & AI",
+          "Cloud & Infrastructure"
+        ]
+      },
+      "kind": "required",
+      "after": [
+        "Machine Learning"
+      ],
+      "why": "required by AI / Machine Learning Engineer"
+    },
+    {
+      "order": 6,
+      "stage": 3,
+      "skill": {
+        "id": "SKL-05",
+        "name": "Deep Learning",
+        "difficulty": "Advanced",
+        "economy": "Digital",
+        "transferability": "Medium",
+        "sdfe_priority": true,
+        "tracks": [
+          "Data & AI"
+        ]
+      },
+      "kind": "required",
+      "after": [
+        "Machine Learning"
+      ],
+      "why": "required by AI / Machine Learning Engineer"
+    }
+  ],
+  "stages": 3,
+  "course_plan": [
+    {
+      "stage": 1,
+      "course": {
+        "id": "CRS-02",
+        "name": "Machine Learning Fundamentals",
+        "provider": "NTU PaCE",
+        "duration_hours": 60.0,
+        "difficulty": "Intermediate",
+        "sfc_funded": true,
+        "teaches": [
+          "Machine Learning",
+          "Statistical Analysis"
+        ]
+      },
+      "covers": [
+        "Machine Learning",
+        "Statistical Analysis"
+      ]
+    },
+    {
+      "stage": 1,
+      "course": {
+        "id": "CRS-07",
+        "name": "Responsible AI & Governance",
+        "provider": "AI Singapore",
+        "duration_hours": 24.0,
+        "difficulty": "Intermediate",
+        "sfc_funded": true,
+        "teaches": [
+          "AI Ethics & Governance"
+        ]
+      },
+      "covers": [
+        "AI Ethics & Governance"
+      ]
+    },
+    {
+      "stage": 2,
+      "course": {
+        "id": "CRS-03",
+        "name": "Deep Learning & Neural Networks",
+        "provider": "NUS-ISS",
+        "duration_hours": 40.0,
+        "difficulty": "Advanced",
+        "sfc_funded": true,
+        "teaches": [
+          "Deep Learning"
+        ]
+      },
+      "covers": [
+        "Deep Learning"
+      ]
+    },
+    {
+      "stage": 2,
+      "course": {
+        "id": "CRS-06",
+        "name": "Generative AI for Business",
+        "provider": "SMU Academy",
+        "duration_hours": 16.0,
+        "difficulty": "Foundation",
+        "sfc_funded": true,
+        "teaches": [
+          "Generative AI",
+          "Prompt Engineering"
+        ]
+      },
+      "covers": [
+        "Generative AI"
+      ]
+    },
+    {
+      "stage": 2,
+      "course": {
+        "id": "CRS-09",
+        "name": "MLOps & Model Deployment",
+        "provider": "NUS-ISS",
+        "duration_hours": 32.0,
+        "difficulty": "Advanced",
+        "sfc_funded": true,
+        "teaches": [
+          "MLOps",
+          "DevOps & CI/CD"
+        ]
+      },
+      "covers": [
+        "MLOps"
+      ]
+    }
+  ],
+  "total_course_hours": 172.0,
+  "critical_path_hours": 100.0,
+  "plan_is_optimal": true,
+  "self_study": [],
+  "recommended_extras": [],
+  "notes": [
+    "Added because a required skill depends on them: Statistical Analysis."
+  ]
+}

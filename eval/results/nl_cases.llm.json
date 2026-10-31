@@ -1,0 +1,889 @@
+{
+  "summary": {
+    "parser": "llm",
+    "model": "gemini-3.8-flash",
+    "cases": 32,
+    "status_accuracy": 1.0,
+    "intent_accuracy": 1.0,
+    "slot_accuracy": 1.0,
+    "exact_match": 1.0,
+    "by_group": {
+      "sample": "5/5",
+      "template": "11/11",
+      "variant": "10/10",
+      "edge": "6/6"
+    },
+    "median_ms": 0.8,
+    "parser_fallbacks": 0,
+    "llm_answers": 27,
+    "grounding_rejections": 0
+  },
+  "cases": [
+    {
+      "id": "S1",
+      "group": "sample",
+      "question": "What skills does a Data Scientist need?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-01"
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-01"
+      },
+      "ms": 1.4,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "S2",
+      "group": "sample",
+      "question": "I know Python and SQL. What is the fastest path to becoming an AI Engineer?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-02",
+        "known_skills": [
+          "SKL-01",
+          "SKL-03"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-02",
+        "known_skills": [
+          "SKL-01",
+          "SKL-03"
+        ]
+      },
+      "ms": 1.6,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "S3",
+      "group": "sample",
+      "question": "Which skills are most transferable between the Digital and Green economies?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "transferable_skills",
+        "source_economy": "Digital",
+        "target_economy": "Green",
+        "bidirectional": true
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "transferable_skills",
+        "source_economy": "Digital",
+        "target_economy": "Green",
+        "bidirectional": true
+      },
+      "ms": 1.1,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "S4",
+      "group": "sample",
+      "question": "I am a healthcare data analyst. What skill gaps do I have for a Sustainability Consultant role?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "gap_analysis",
+        "target_role": "ROL-16",
+        "current_role": "ROL-13"
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "gap_analysis",
+        "target_role": "ROL-16",
+        "current_role": "ROL-13"
+      },
+      "ms": 1.0,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "S5",
+      "group": "sample",
+      "question": "What SkillsFuture courses should I take to learn Machine Learning?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "courses_for_skill",
+        "skills": [
+          "SKL-04"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "courses_for_skill",
+        "skills": [
+          "SKL-04"
+        ]
+      },
+      "ms": 0.6,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "T1a",
+      "group": "template",
+      "question": "What skills do I need to become a Data Scientist?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-01"
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-01"
+      },
+      "ms": 0.8,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "T1b",
+      "group": "template",
+      "question": "What do I need to learn to work as a UX designer?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-09"
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-09"
+      },
+      "ms": 0.6,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "T1c",
+      "group": "template",
+      "question": "Which skills are needed for a RegTech Specialist role?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-11"
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-11"
+      },
+      "ms": 0.6,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "T1d",
+      "group": "template",
+      "question": "requirements for cloud solutions architect",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-05"
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "skills_for_role",
+        "target_role": "ROL-05"
+      },
+      "ms": 0.7,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "T2a",
+      "group": "template",
+      "question": "I know Python, SQL and Statistics. What's the fastest path to Data Scientist?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-01",
+        "known_skills": [
+          "SKL-01",
+          "SKL-03",
+          "SKL-52"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-01",
+        "known_skills": [
+          "SKL-01",
+          "SKL-03",
+          "SKL-52"
+        ]
+      },
+      "ms": 0.8,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "T2b",
+      "group": "template",
+      "question": "I have experience in DevOps and Docker. How do I become a Cloud Solutions Architect?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-05",
+        "known_skills": [
+          "SKL-19",
+          "SKL-22"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-05",
+        "known_skills": [
+          "SKL-19",
+          "SKL-22"
+        ]
+      },
+      "ms": 0.8,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "T2c",
+      "group": "template",
+      "question": "I know Python. How can I become an ML engineer?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-02",
+        "known_skills": [
+          "SKL-01"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-02",
+        "known_skills": [
+          "SKL-01"
+        ]
+      },
+      "ms": 1.2,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "T2d",
+      "group": "template",
+      "question": "How do I become a Smart Manufacturing Engineer? I know IoT.",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-18",
+        "known_skills": [
+          "SKL-45"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-18",
+        "known_skills": [
+          "SKL-45"
+        ]
+      },
+      "ms": 0.8,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "T3a",
+      "group": "template",
+      "question": "Which Digital skills are most transferable to the Green economy?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "transferable_skills",
+        "source_economy": "Digital",
+        "target_economy": "Green",
+        "bidirectional": false
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "transferable_skills",
+        "source_economy": "Digital",
+        "target_economy": "Green",
+        "bidirectional": false
+      },
+      "ms": 0.9,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "T3b",
+      "group": "template",
+      "question": "Which Care skills transfer best to the Digital economy?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "transferable_skills",
+        "source_economy": "Care",
+        "target_economy": "Digital",
+        "bidirectional": false
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "transferable_skills",
+        "source_economy": "Care",
+        "target_economy": "Digital",
+        "bidirectional": false
+      },
+      "ms": 0.8,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "T3c",
+      "group": "template",
+      "question": "What green skills carry over into healthcare?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "transferable_skills",
+        "source_economy": "Green",
+        "target_economy": "Care",
+        "bidirectional": false
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "transferable_skills",
+        "source_economy": "Green",
+        "target_economy": "Care",
+        "bidirectional": false
+      },
+      "ms": 0.7,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "V1",
+      "group": "variant",
+      "question": "I already know machine lerning and pyton - quickest route to becoming an AI engineer?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-02",
+        "known_skills": [
+          "SKL-01",
+          "SKL-04"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-02",
+        "known_skills": [
+          "SKL-04",
+          "SKL-01"
+        ]
+      },
+      "ms": 0.9,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "V2",
+      "group": "variant",
+      "question": "I'm good at data visualisation and agile. Roadmap to Product Manager?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-08",
+        "known_skills": [
+          "SKL-20",
+          "SKL-51"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-08",
+        "known_skills": [
+          "SKL-51",
+          "SKL-20"
+        ]
+      },
+      "ms": 0.7,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "V3",
+      "group": "variant",
+      "question": "As a full-stack developer, what's the fastest way to become a DevOps Engineer?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-07",
+        "current_role": "ROL-06"
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-07",
+        "current_role": "ROL-06"
+      },
+      "ms": 0.9,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "V4",
+      "group": "variant",
+      "question": "I'm a Data Engineer. What gaps do I have for AI Engineer?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "gap_analysis",
+        "target_role": "ROL-02",
+        "current_role": "ROL-03"
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "gap_analysis",
+        "target_role": "ROL-02",
+        "current_role": "ROL-03"
+      },
+      "ms": 1.0,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "V5",
+      "group": "variant",
+      "question": "I know Python and SQL, what am I missing to be a FinTech Data Analyst?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "gap_analysis",
+        "target_role": "ROL-10",
+        "known_skills": [
+          "SKL-01",
+          "SKL-03"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "gap_analysis",
+        "target_role": "ROL-10",
+        "known_skills": [
+          "SKL-01",
+          "SKL-03"
+        ]
+      },
+      "ms": 0.7,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "V6",
+      "group": "variant",
+      "question": "Gap analysis for Health Data Analyst - my skills are data analytics and SQL",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "gap_analysis",
+        "target_role": "ROL-13",
+        "known_skills": [
+          "SKL-02",
+          "SKL-03"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "gap_analysis",
+        "target_role": "ROL-13",
+        "known_skills": [
+          "SKL-02",
+          "SKL-03"
+        ]
+      },
+      "ms": 0.5,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "V7",
+      "group": "variant",
+      "question": "Which skills move most easily between tech and sustainability jobs?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "transferable_skills",
+        "source_economy": "Digital",
+        "target_economy": "Green",
+        "bidirectional": true
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "transferable_skills",
+        "source_economy": "Digital",
+        "target_economy": "Green",
+        "bidirectional": true
+      },
+      "ms": 0.9,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "V8",
+      "group": "variant",
+      "question": "What courses teach carbon accounting?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "courses_for_skill",
+        "skills": [
+          "SKL-42"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "courses_for_skill",
+        "skills": [
+          "SKL-42"
+        ]
+      },
+      "ms": 0.4,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "V9",
+      "group": "variant",
+      "question": "Where can I learn Kubernetes?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "courses_for_skill",
+        "skills": [
+          "SKL-22"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "courses_for_skill",
+        "skills": [
+          "SKL-22"
+        ]
+      },
+      "ms": 0.4,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "V10",
+      "group": "variant",
+      "question": "Recommend a SkillsFuture course for prompt engineering",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "courses_for_skill",
+        "skills": [
+          "SKL-09"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "courses_for_skill",
+        "skills": [
+          "SKL-09"
+        ]
+      },
+      "ms": 0.4,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    },
+    {
+      "id": "E1",
+      "group": "edge",
+      "question": "What skills do I need to become a data analyst?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "needs_clarification"
+      },
+      "expected": {
+        "status": "needs_clarification"
+      },
+      "ms": 0.3,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "E2",
+      "group": "edge",
+      "question": "What skills do I need to become an astronaut?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "not_found"
+      },
+      "expected": {
+        "status": "not_found"
+      },
+      "ms": 0.3,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "E3",
+      "group": "edge",
+      "question": "What's the weather in Singapore?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "unsupported"
+      },
+      "expected": {
+        "status": "unsupported"
+      },
+      "ms": 0.2,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "E4",
+      "group": "edge",
+      "question": "Write me a poem about data",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "unsupported"
+      },
+      "expected": {
+        "status": "unsupported"
+      },
+      "ms": 0.2,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "E5",
+      "group": "edge",
+      "question": "Which skills are transferable from Digital to Digital?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "needs_clarification"
+      },
+      "expected": {
+        "status": "needs_clarification"
+      },
+      "ms": 0.2,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "template",
+      "grounding_problems": []
+    },
+    {
+      "id": "E6",
+      "group": "edge",
+      "question": "I know Python and basket weaving. What's the fastest path to Data Engineer?",
+      "ok_status": true,
+      "ok_intent": true,
+      "ok_slots": true,
+      "exact": true,
+      "got": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-03",
+        "known_skills": [
+          "SKL-01"
+        ]
+      },
+      "expected": {
+        "status": "answered",
+        "intent": "learning_path",
+        "target_role": "ROL-03",
+        "known_skills": [
+          "SKL-01"
+        ]
+      },
+      "ms": 1.0,
+      "misses": [],
+      "parser": "llm",
+      "answer_source": "llm",
+      "grounding_problems": []
+    }
+  ]
+}

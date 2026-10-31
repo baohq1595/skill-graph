@@ -1,0 +1,30 @@
+# Held-out natural-language cases.
+#
+# Written before any tuning of the rule parser on nl_cases.yaml and never used
+# to change code or prompts. Report this score next to the development score:
+# the gap between them is how much the development number is inflated by tuning.
+
+- {id: H1, group: holdout, q: "List the skills a DevOps Engineer must have",
+   status: answered, intent: skills_for_role, target_role: ROL-07}
+- {id: H2, group: holdout, q: "what competencies does a green building engineer require",
+   status: answered, intent: skills_for_role, target_role: ROL-17}
+- {id: H3, group: holdout, q: "I've got SQL and data analytics under my belt. Best way into a Health Data Analyst job?",
+   status: answered, intent: learning_path, target_role: ROL-13, known_skills: [SKL-03, SKL-02]}
+- {id: H4, group: holdout, q: "Python + statistics. Shortest route to Data Scientist please",
+   status: answered, intent: learning_path, target_role: ROL-01, known_skills: [SKL-01, SKL-52]}
+- {id: H5, group: holdout, q: "Which Green skills would be useful in the Care economy?",
+   status: answered, intent: transferable_skills, source_economy: Green, target_economy: Care, bidirectional: false}
+- {id: H6, group: holdout, q: "most transferable skills from finance to sustainability",
+   status: answered, intent: transferable_skills, source_economy: Digital, target_economy: Green, bidirectional: false}
+- {id: H7, group: holdout, q: "I work as a UX Designer. What am I lacking for Product Manager?",
+   status: answered, intent: gap_analysis, target_role: ROL-08, current_role: ROL-09}
+- {id: H8, group: holdout, q: "Compare my skills (Python, Full-Stack Development) against the AI Engineer role",
+   status: answered, intent: gap_analysis, target_role: ROL-02, known_skills: [SKL-01, SKL-17]}
+- {id: H9, group: holdout, q: "any courses for ESG reporting?",
+   status: answered, intent: courses_for_skill, skills: [SKL-44]}
+- {id: H10, group: holdout, q: "How can I pick up deep learning?",
+   status: answered, intent: courses_for_skill, skills: [SKL-05]}
+- {id: H11, group: holdout, q: "Teach me how to cook pasta",
+   status: unsupported}
+- {id: H12, group: holdout, q: "What skills does an analyst need?",
+   status: needs_clarification}

@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "skillgraph"
+version = "1.0.0"
+description = "Mini Skill & Competency Graph: SkillsFuture data as a graph, with learning paths, gap analysis and a natural-language query layer."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "networkx>=3.2",
+    "pydantic>=2.6",
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "typer>=0.12",
+    "rich>=13",
+    "rapidfuzz>=3.6",
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+llm = ["google-genai>=1.50"]
+dev = ["pytest>=8", "httpx>=0.27", "google-genai>=1.50"]
+
+[project.scripts]
+skillgraph = "skillgraph.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+skillgraph = ["viz/static/*", "resources/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

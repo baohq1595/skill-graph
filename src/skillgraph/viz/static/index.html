@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skill Graph Explorer</title>
+<script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<style>
+  :root {
+    --bg: #f4f6f9; --panel: #ffffff; --ink: #18202c; --muted: #5d6878; --line: #dde2ea;
+    --accent: #1f4fd8; --ok: #15803d; --warn: #b45309;
+    --c-Economy: #475569; --c-Sector: #7c3aed; --c-SkillTrack: #db2777;
+    --c-Skill: #1f4fd8; --c-JobRole: #dc2626; --c-Course: #0f766e;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+         color: var(--ink); background: var(--bg); display: grid; grid-template-columns: 300px minmax(0, 1fr) 380px;
+         grid-template-rows: 52px minmax(0, 1fr); overflow: hidden; }
+  header { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; padding: 0 18px;
+           background: var(--ink); color: #fff; }
+  header h1 { font-size: 16px; margin: 0; letter-spacing: .01em; }
+  header .stats { color: #b6c0cf; font-size: 12px; }
+  header .llm { margin-left: auto; font-size: 12px; color: #b6c0cf; }
+  aside, section.detail { background: var(--panel); overflow-y: auto; padding: 14px 16px; }
+  aside { border-right: 1px solid var(--line); }
+  section.detail { border-left: 1px solid var(--line); }
+  #graph { position: relative; min-height: 0; min-width: 0; overflow: hidden; }
+  h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted);
+       margin: 18px 0 8px; }
+  h2:first-child { margin-top: 0; }
+  label.check { display: flex; align-items: center; gap: 8px; padding: 2px 0; cursor: pointer; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+  input[type=text], select, textarea { width: 100%; padding: 7px 9px; border: 1px solid var(--line);
+       border-radius: 6px; font: inherit; background: #fff; color: var(--ink); }
+  textarea { resize: vertical; min-height: 58px; }
+  button { font: inherit; padding: 7px 12px; border-radius: 6px; border: 1px solid var(--accent);
+           background: var(--accent); color: #fff; cursor: pointer; }
+  button.ghost { background: #fff; color: var(--accent); }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+           outline: 2px solid var(--accent); outline-offset: 1px; }
+  .row { display: flex; gap: 8px; margin-top: 8px; }
+  .stack > * + * { margin-top: 8px; }
+  .muted { color: var(--muted); }
+  .small { font-size: 12px; }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 99px; font-size: 11px; color: #fff; }
+  table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+  td, th { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  a.node { color: var(--accent); cursor: pointer; text-decoration: none; }
+  a.node:hover { text-decoration: underline; }
+  .answer { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; background: #fbfcfe; }
+  .answer h2, .answer h3 { text-transform: none; letter-spacing: 0; color: var(--ink); font-size: 14px; }
+  .bar { height: 8px; background: var(--accent); border-radius: 4px; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+  .tabs button { flex: 1; background: #fff; color: var(--muted); border-color: var(--line); }
+  .tabs button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .hint { position: absolute; left: 12px; bottom: 10px; font-size: 12px; color: var(--muted);
+          background: rgba(255,255,255,.85); padding: 4px 8px; border-radius: 6px; }
+  @media (max-width: 1100px) {
+    body { grid-template-columns: 1fr; grid-template-rows: 52px auto 60vh auto; overflow: auto; }
+    aside, section.detail { border: 0; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Skill &amp; Competency Graph</h1>
+  <span class="stats" id="stats">loading…</span>
+  <span class="llm" id="llm"></span>
+</header>
+
+<aside>
+  <h2>Show</h2>
+  <div id="filters"></div>
+
+  <h2>Find a node</h2>
+  <input type="text" id="search" list="names" placeholder="e.g. Machine Learning" aria-label="Find a node">
+  <datalist id="names"></datalist>
+
+  <h2>Learning path</h2>
+  <div class="stack">
+    <select id="learner" aria-label="Sample learner"><option value="">— custom —</option></select>
+    <select id="role" aria-label="Target role"></select>
+    <input type="text" id="skills" placeholder="Current skills, comma-separated" aria-label="Current skills">
+    <div class="row">
+      <button id="btnPath">Show path</button>
+      <button id="btnGap" class="ghost">Gap analysis</button>
+    </div>
+  </div>
+
+  <h2>Ask in plain English</h2>
+  <div class="stack">
+    <textarea id="question" aria-label="Question">I know Python and SQL. What is the fastest path to becoming an AI Engineer?</textarea>
+    <div class="row"><button id="btnAsk">Ask</button><button id="btnReset" class="ghost">Reset view</button></div>
+  </div>
+</aside>
+
+<main id="graph"><div class="hint">Click a node for details · drag to rearrange · scroll to zoom</div></main>
+
+<section class="detail">
+  <div class="tabs">
+    <button id="tabDetail" class="on">Details</button>
+    <button id="tabDemand">Skill demand</button>
+  </div>
+  <div id="detail"><p class="muted">Select a node, run a learning path, or ask a question.</p></div>
+</section>
+
+<script>
+const LABELS = ["Economy", "Sector", "SkillTrack", "Skill", "JobRole", "Course"];
+const COLOR = Object.fromEntries(LABELS.map(l => [l, getComputedStyle(document.documentElement).getPropertyValue("--c-" + l).trim()]));
+const NICE = {Economy: "Economy", Sector: "Sector", SkillTrack: "Skill track", Skill: "Skill", JobRole: "Job role", Course: "Course"};
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let raw, nodes, edges, network, byId = {}, nameToId = {};
+
+async function api(path, body) {
+  const res = await fetch(path, body ? {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)} : {});
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || data.detail?.[0]?.msg || JSON.stringify(data));
+  return data;
+}
+
+function baseStyle(n) {
+  const deg = raw.edges.filter(e => e.source === n.id || e.target === n.id).length;
+  return {
+    id: n.id, label: n.name.length > 26 ? n.name.slice(0, 24) + "…" : n.name, group: n.label,
+    value: n.label === "Economy" ? 14 : 4 + deg, shape: n.label === "Course" ? "box" : "dot",
+    color: {background: COLOR[n.label], border: COLOR[n.label], highlight: {background: COLOR[n.label], border: "#111"}},
+    font: {color: n.label === "Course" ? "#fff" : "#18202c", size: 12, face: "Helvetica"},
+    title: `${NICE[n.label]}: ${n.name}`, opacity: 1, hidden: false,
+  };
+}
+
+async function init() {
+  raw = await api("/graph");
+  raw.nodes.forEach(n => { byId[n.id] = n; nameToId[n.name.toLowerCase()] = n.id; });
+  nodes = new vis.DataSet(raw.nodes.map(baseStyle));
+  edges = new vis.DataSet(raw.edges.map((e, i) => ({
+    id: i, from: e.source, to: e.target, arrows: {to: {enabled: true, scaleFactor: .4}},
+    color: {color: e.type === "PREREQUISITE_OF" ? (e.strength === "soft" ? "#f59e0b" : "#d97706") : "#c3cad5", opacity: .8},
+    dashes: e.strength === "soft", width: e.type === "PREREQUISITE_OF" ? 2 : 1, title: e.type + (e.strength ? ` (${e.strength})` : ""),
+  })));
+  network = new vis.Network($("graph"), {nodes, edges}, {
+    physics: {barnesHut: {gravitationalConstant: -2600, centralGravity: .35, springLength: 95, avoidOverlap: .2},
+              stabilization: {iterations: 300}},
+    interaction: {hover: true, tooltipDelay: 120},
+    nodes: {scaling: {min: 8, max: 34, label: {enabled: false}}, borderWidth: 1},
+  });
+  network.once("stabilizationIterationsDone", () => { network.setOptions({physics: false}); network.fit(); });
+  network.on("click", p => { if (p.nodes.length) showNode(p.nodes[0]); });
+
+  const counts = Object.fromEntries(LABELS.map(l => [l, raw.nodes.filter(n => n.label === l).length]));
+  $("stats").textContent = `${raw.nodes.length} nodes · ${raw.edges.length} relationships`;
+  $("filters").innerHTML = LABELS.map(l => `<label class="check"><input type="checkbox" checked data-label="${l}">
+     <span class="dot" style="background:${COLOR[l]}"></span>${NICE[l]} <span class="muted small">(${counts[l]})</span></label>`).join("")
+     + `<p class="small muted" style="margin:6px 0 0">Orange arrows: prerequisites (dashed = recommended).</p>`;
+  document.querySelectorAll("#filters input").forEach(cb => cb.onchange = applyFilters);
+  $("names").innerHTML = raw.nodes.filter(n => n.label !== "Economy").map(n => `<option value="${esc(n.name)}">`).join("");
+  $("search").onchange = () => { const id = nameToId[$("search").value.toLowerCase()]; if (id) focusNode(id); };
+
+  const roles = raw.nodes.filter(n => n.label === "JobRole").sort((a, b) => a.name.localeCompare(b.name));
+  $("role").innerHTML = roles.map(r => `<option value="${r.id}">${esc(r.name)}</option>`).join("");
+  const learners = await api("/learners");
+  $("learner").innerHTML += learners.map(l => `<option value="${l.id}">${esc(l.name)}</option>`).join("");
+  $("learner").onchange = () => {
+    const l = learners.find(x => x.id === $("learner").value);
+    if (!l) return;
+    $("role").value = l.target_role;
+    $("skills").value = l.current_skills.map(s => byId[s].name).join(", ");
+  };
+  $("btnPath").onclick = runPath; $("btnGap").onclick = runGap; $("btnAsk").onclick = runAsk;
+  $("btnReset").onclick = resetView;
+  $("tabDetail").onclick = () => tab("detail"); $("tabDemand").onclick = () => tab("demand");
+  api("/health").then(h => $("llm").textContent = "NL layer: " + h.llm);
+}
+
+function applyFilters() {
+  const on = new Set([...document.querySelectorAll("#filters input:checked")].map(c => c.dataset.label));
+  nodes.update(raw.nodes.map(n => ({id: n.id, hidden: !on.has(n.label)})));
+}
+
+function resetView() {
+  nodes.update(raw.nodes.map(baseStyle)); applyFilters(); network.fit({animation: true});
+  $("detail").innerHTML = `<p class="muted">Select a node, run a learning path, or ask a question.</p>`;
+}
+
+function dimExcept(keep) {
+  nodes.update(raw.nodes.map(n => ({id: n.id, opacity: keep.has(n.id) ? 1 : 0.12,
+    font: {color: keep.has(n.id) ? (n.label === "Course" ? "#fff" : "#18202c") : "rgba(0,0,0,0)"}})));
+}
+
+function focusNode(id) { network.selectNodes([id]); network.focus(id, {scale: 1.2, animation: true}); showNode(id); }
+
+function link(id) { return `<a class="node" data-id="${id}">${esc(byId[id]?.name || id)}</a>`; }
+function wireLinks() { document.querySelectorAll("a.node").forEach(a => a.onclick = () => focusNode(a.dataset.id)); }
+
+function showNode(id) {
+  tab("detail");
+  const n = byId[id];
+  const skip = new Set(["id", "name", "label", "track_ids", "skill_ids", "sector_id"]);
+  const props = Object.entries(n).filter(([k, v]) => !skip.has(k) && v !== null && v !== "")
+    .map(([k, v]) => `<tr><th>${esc(k.replace(/_/g, " "))}</th><td>${esc(Array.isArray(v) ? v.join(", ") : v)}</td></tr>`).join("");
+  const out = raw.edges.filter(e => e.source === id), inn = raw.edges.filter(e => e.target === id);
+  const group = (list, key, arrow) => {
+    const byType = {};
+    list.forEach(e => (byType[e.type] ??= []).push(e[key]));
+    return Object.entries(byType).map(([t, ids]) =>
+      `<tr><th>${arrow} ${t}</th><td>${ids.map(link).join(", ")}</td></tr>`).join("");
+  };
+  $("detail").innerHTML = `<span class="pill" style="background:${COLOR[n.label]}">${NICE[n.label]}</span>
+    <h3 style="margin:6px 0 10px">${esc(n.name)}</h3><table>${props}</table>
+    <h2>Relationships</h2><table>${group(out, "target", "→")}${group(inn, "source", "←")}</table>`;
+  wireLinks();
+  dimExcept(new Set([id, ...out.map(e => e.target), ...inn.map(e => e.source)]));
+}
+
+function learnerBody() {
+  return {target_role: $("role").value,
+          current_skills: $("skills").value.split(",").map(s => s.trim()).filter(Boolean)};
+}
+
+async function runPath() {
+  tab("detail");
+  try {
+    const p = await api("/learning-path", learnerBody());
+    const known = new Set(raw.nodes.filter(n => p.already_have.includes(n.name)).map(n => n.id));
+    const stageOf = Object.fromEntries(p.steps.map(s => [s.skill.id, s.stage]));
+    const courseIds = new Set(p.course_plan.map(c => c.course.id));
+    const keep = new Set([p.target_role.id, ...Object.keys(stageOf), ...courseIds, ...known]);
+    dimExcept(keep);
+    nodes.update(p.steps.map(s => ({id: s.skill.id, label: `${s.order}. ${s.skill.name}`,
+      color: {background: "#f59e0b", border: "#b45309"}, borderWidth: 2})));
+    nodes.update([...known].map(id => ({id, color: {background: "#16a34a", border: "#15803d"}})));
+    $("detail").innerHTML = `<h3 style="margin-top:0">Path to ${esc(p.target_role.name)}</h3>
+      <p class="small muted">Green: already have · amber: to learn, numbered in order · ${p.stages} stage(s)</p>
+      <table><tr><th>#</th><th>Stage</th><th>Skill</th><th>Why</th></tr>
+      ${p.steps.map(s => `<tr><td>${s.order}</td><td>${s.stage}</td><td>${link(s.skill.id)}</td><td class="small">${esc(s.why)}</td></tr>`).join("")}</table>
+      <h2>Course plan · ${p.total_course_hours} h (${p.critical_path_hours} h in parallel)</h2>
+      <table><tr><th>Stage</th><th>Course</th><th>h</th></tr>
+      ${p.course_plan.map(c => `<tr><td>${c.stage}</td><td>${link(c.course.id)}<div class="small muted">${esc(c.covers.join(", "))}</div></td><td>${c.course.duration_hours}</td></tr>`).join("")}</table>
+      ${p.self_study.length ? `<p class="small">No catalogue course for: ${esc(p.self_study.join(", "))}</p>` : ""}
+      ${p.notes.map(n => `<p class="small muted">${esc(n)}</p>`).join("")}`;
+    wireLinks();
+    network.fit({nodes: [...keep], animation: true});
+  } catch (e) { error(e); }
+}
+
+async function runGap() {
+  tab("detail");
+  try {
+    const g = await api("/gap-analysis", learnerBody());
+    const gapIds = g.gaps.map(x => x.skill.id);
+    dimExcept(new Set([g.target_role.id, ...gapIds, ...g.have.map(h => h.id)]));
+    const tierColor = {High: "#dc2626", Medium: "#d97706", Low: "#64748b"};
+    nodes.update(g.gaps.map(x => ({id: x.skill.id, color: {background: tierColor[x.priority], border: tierColor[x.priority]}})));
+    $("detail").innerHTML = `<h3 style="margin-top:0">Gaps for ${esc(g.target_role.name)}</h3>
+      <p class="small muted">You have ${g.have.length} of ${g.have.length + g.gaps.length} required skills (${Math.round(g.coverage * 100)}%).</p>
+      <table><tr><th>#</th><th>Skill</th><th>Priority</th><th>Course</th></tr>
+      ${g.gaps.map(x => `<tr><td>${x.rank}</td><td>${link(x.skill.id)}<div class="small muted">${esc(x.reasons.slice(0, 2).join("; "))}</div></td>
+        <td><span class="pill" style="background:${tierColor[x.priority]}">${x.priority}</span></td>
+        <td class="small">${x.courses.length ? link(x.courses[0].course.id) : "none in catalogue"}</td></tr>`).join("")}</table>
+      ${g.notes.map(n => `<p class="small muted">${esc(n)}</p>`).join("")}`;
+    wireLinks();
+  } catch (e) { error(e); }
+}
+
+async function runAsk() {
+  tab("detail");
+  $("detail").innerHTML = `<p class="muted">Thinking…</p>`;
+  try {
+    const r = await api("/ask", {question: $("question").value});
+    const ids = new Set();
+    const walk = o => { if (o && typeof o === "object") { if (o.id && byId[o.id]) ids.add(o.id); Object.values(o).forEach(walk); } };
+    walk(r.resolved); walk(r.results);
+    if (ids.size) { dimExcept(ids); network.fit({nodes: [...ids], animation: true}); }
+    $("detail").innerHTML = `<p class="small muted">status ${r.status} · parser ${r.parser} · answer ${r.answer_source}</p>
+      <div class="answer">${marked.parse(r.answer)}</div>
+      ${r.grounding_problems.length ? `<p class="small" style="color:var(--warn)">LLM answer replaced: ${esc(r.grounding_problems.join("; "))}</p>` : ""}
+      <h2>Trace</h2><table>${r.trace.map(t => `<tr><th>${t.step}</th><td class="small">${t.ms} ms</td></tr>`).join("")}</table>`;
+  } catch (e) { error(e); }
+}
+
+function error(e) { $("detail").innerHTML = `<p style="color:#b91c1c">${esc(e.message)}</p>`; }
+
+function tab(which) {
+  $("tabDetail").classList.toggle("on", which === "detail");
+  $("tabDemand").classList.toggle("on", which === "demand");
+  if (which === "demand") renderDemand();
+}
+
+function renderDemand() {
+  const demand = raw.nodes.filter(n => n.label === "Skill").map(s => ({
+    s, roles: raw.edges.filter(e => e.type === "REQUIRED_BY" && e.source === s.id).length,
+    courses: raw.edges.filter(e => e.type === "TEACHES" && e.target === s.id).length,
+  })).sort((a, b) => b.roles - a.roles || a.s.name.localeCompare(b.s.name));
+  const max = demand[0].roles;
+  const rows = demand.slice(0, 15).map(d => `<tr><td>${link(d.s.id)}</td>
+     <td style="width:40%"><div class="bar" style="width:${100 * d.roles / max}%"></div></td><td>${d.roles}</td>
+     <td class="small muted">${d.courses || "—"}</td></tr>`).join("");
+  const noCourse = demand.filter(d => d.roles > 0 && d.courses === 0);
+  $("detail").innerHTML = `<h3 style="margin-top:0">Most-required skills</h3>
+    <table><tr><th>Skill</th><th></th><th>Roles</th><th>Courses</th></tr>${rows}</table>
+    <h2>Required by a role but no course</h2>
+    <p class="small">${noCourse.map(d => link(d.s.id)).join(", ") || "none"}</p>`;
+  wireLinks();
+}
+
+init().catch(error);
+</script>
+</body>
+</html>

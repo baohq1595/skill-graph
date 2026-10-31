@@ -1,0 +1,12 @@
+.venv
+.cache
+.env
+.git
+**/__pycache__
+eval/results
+docs
+tests
+# credentials never enter git or the image; mount them at run time
+.secrets/
+*service-account*.json
+*service_account*.json
